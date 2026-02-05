@@ -61,15 +61,15 @@ if (!isset($response['realtime']['Lab B'])) $response['realtime']['Lab B'] = 0;
 // attendance -> admission -> (optional) year_level
 // We use LEFT JOIN so rows without a year_level_id are still counted under '0' / 'Unknown'.
 $sqlByYear = "
-    SELECT COALESCE(yl.level, 0) AS year, a.status, COUNT(*) AS cnt
+    SELECT COALESCE(yl.year_name, 'Unknown') AS year, a.status, COUNT(*) AS cnt
     FROM attendance a
     JOIN admissions ad   ON a.admission_id = ad.admission_id
     LEFT JOIN year_levels yl ON ad.year_level_id = yl.year_id
     WHERE a.attendance_date = ?
       AND ad.academic_year_id = ?
       AND ad.semester_id = ?
-    GROUP BY COALESCE(yl.level, 0), a.status
-    ORDER BY COALESCE(yl.level, 0)
+    GROUP BY COALESCE(yl.year_name, 'Unknown'), a.status
+    ORDER BY COALESCE(yl.year_name, 'Unknown')
 ";
 
 if ($stmt = $conn->prepare($sqlByYear)) {

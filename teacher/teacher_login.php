@@ -58,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $_SESSION['teacher_email'] = $teacher_record['teacher_email'];
                     $_SESSION['teacher_department'] = $teacher_record['teacher_department'];
 
+                    session_regenerate_id(true);
                     header("Location: teacher_dashboard.php");
                     exit();
                 }

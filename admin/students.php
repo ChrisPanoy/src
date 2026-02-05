@@ -742,16 +742,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- JsBarcode -->
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode/dist/JsBarcode.all.min.js"></script>
-<script>
-<?php
-$students = $conn->query("SELECT * FROM students");
-while ($row = $students->fetch_assoc()) {
-    echo "JsBarcode('#barcode-{$row['id']}', '{$row['barcode']}', {format: 'CODE128', width:2, height:40, displayValue:true});\n";
-}
-?>
-</script>
+<!-- Barcode generation script removed as it uses outdated schema. -->
 <?php include '../includes/footer.php'; ?>
 
 

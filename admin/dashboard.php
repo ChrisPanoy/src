@@ -72,7 +72,8 @@ while ($row = $present_query->fetch_assoc()) {
 $stmtDrill->close();
 
 // After session_start() and before header HTML, get admin name
-$admin_name = isset($_SESSION['user']['name']) ? $_SESSION['user']['name'] : 'Admin';
+$user = $_SESSION['user'] ?? [];
+$admin_name = trim(($user['firstname'] ?? '') . ' ' . ($user['lastname'] ?? '')) ?: 'Admin';
 ?>
 
 <!-- Modernized CSS -->

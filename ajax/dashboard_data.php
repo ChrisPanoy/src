@@ -20,7 +20,16 @@ $attendance_stats = [
     'Time Out' => 0,
 ];
 
-$attendance_overview_sql = "\n    SELECT \n        SUM(CASE WHEN a.time_in IS NOT NULL THEN 1 ELSE 0 END) AS time_in_count,\n        SUM(CASE WHEN a.time_out IS NOT NULL THEN 1 ELSE 0 END) AS time_out_count\n    FROM attendance a\n    JOIN admission adm ON a.admission_id = adm.admission_id\n    JOIN schedule sc ON adm.schedule_id = sc.schedule_id\n    WHERE a.attendance_date = ?\n      AND sc.employee_id = ?\n";
+$attendance_overview_sql = "
+    SELECT 
+        SUM(CASE WHEN a.time_in IS NOT NULL THEN 1 ELSE 0 END) AS time_in_count,
+        SUM(CASE WHEN a.time_out IS NOT NULL THEN 1 ELSE 0 END) AS time_out_count
+    FROM attendance a
+    JOIN admissions adm ON a.admission_id = adm.admission_id
+    JOIN schedule sc ON adm.schedule_id = sc.schedule_id
+    WHERE a.attendance_date = ?
+      AND sc.employee_id = ?
+";
 $attendance_overview_query = $conn->prepare($attendance_overview_sql);
 $attendance_overview_query->bind_param('si', $today, $teacher_id_int);
 $attendance_overview_query->execute();
@@ -35,7 +44,16 @@ $weekly_trends = [];
 $days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 foreach ($days as $day) {
     $date = date('Y-m-d', strtotime($day . ' this week'));
-    $trend_sql = "\n        SELECT \n            SUM(CASE WHEN a.time_in IS NOT NULL THEN 1 ELSE 0 END) AS signed_in,\n            SUM(CASE WHEN a.time_out IS NOT NULL THEN 1 ELSE 0 END) AS signed_out\n        FROM attendance a\n        JOIN admission adm ON a.admission_id = adm.admission_id\n        JOIN schedule sc ON adm.schedule_id = sc.schedule_id\n        WHERE a.attendance_date = ?\n          AND sc.employee_id = ?\n    ";
+    $trend_sql = "
+        SELECT 
+            SUM(CASE WHEN a.time_in IS NOT NULL THEN 1 ELSE 0 END) AS signed_in,
+            SUM(CASE WHEN a.time_out IS NOT NULL THEN 1 ELSE 0 END) AS signed_out
+        FROM attendance a
+        JOIN admissions adm ON a.admission_id = adm.admission_id
+        JOIN schedule sc ON adm.schedule_id = sc.schedule_id
+        WHERE a.attendance_date = ?
+          AND sc.employee_id = ?
+    ";
     $trend_query = $conn->prepare($trend_sql);
     $trend_query->bind_param('si', $date, $teacher_id_int);
     $trend_query->execute();
@@ -51,7 +69,19 @@ $today_attendance = array_sum($attendance_stats);
 
 // Present today by gender (boys vs girls) for this teacher (src_db joins)
 // We treat male/m as Boys, female/f as Girls; anything else is ignored for the chart
-$gender_sql = "\n    SELECT \n        LOWER(TRIM(st.gender)) AS gkey,\n        COUNT(DISTINCT adm.student_id) AS cnt\n    FROM attendance a\n    JOIN admission adm ON a.admission_id = adm.admission_id\n    JOIN students st ON adm.student_id = st.student_id\n    JOIN schedule sc ON adm.schedule_id = sc.schedule_id\n    WHERE a.attendance_date = ?\n      AND a.status IN ('Present','Late')\n      AND sc.employee_id = ?\n    GROUP BY LOWER(TRIM(st.gender))\n";
+$gender_sql = "
+    SELECT 
+        LOWER(TRIM(st.gender)) AS gkey,
+        COUNT(DISTINCT adm.student_id) AS cnt
+    FROM attendance a
+    JOIN admissions adm ON a.admission_id = adm.admission_id
+    JOIN students st ON adm.student_id = st.student_id
+    JOIN schedule sc ON adm.schedule_id = sc.schedule_id
+    WHERE a.attendance_date = ?
+      AND a.status IN ('Present','Late')
+      AND sc.employee_id = ?
+    GROUP BY LOWER(TRIM(st.gender))
+";
 
 $present_gender = ['boys' => 0, 'girls' => 0];
 $gender_stmt = $conn->prepare($gender_sql);
@@ -76,7 +106,7 @@ if ($gender_stmt) {
 $subject_gender_labels = [];
 $subject_male_counts = [];
 $subject_female_counts = [];
-$subj_sql = "SELECT subj.subject_name FROM schedule sc JOIN subject subj ON sc.subject_id=subj.subject_id WHERE sc.employee_id=? GROUP BY subj.subject_id, subj.subject_name ORDER BY subj.subject_name";
+$subj_sql = "SELECT subj.subject_name FROM schedule sc JOIN subjects subj ON sc.subject_id=subj.subject_id WHERE sc.employee_id=? GROUP BY subj.subject_id, subj.subject_name ORDER BY subj.subject_name";
 if ($subj_stmt = $conn->prepare($subj_sql)) {
     $subj_stmt->bind_param('i', $teacher_id_int);
     $subj_stmt->execute();
@@ -89,7 +119,23 @@ if ($subj_stmt = $conn->prepare($subj_sql)) {
 }
 
 // Present count per subject for today, split by gender, using LEFT JOIN to keep zero-attendance subjects
-$present_sql = "\n    SELECT \n        subj.subject_name,\n        LOWER(TRIM(st.gender)) AS gkey,\n        SUM(CASE WHEN a.attendance_id IS NOT NULL THEN 1 ELSE 0 END) AS present_count\n    FROM schedule sc\n    JOIN subject subj ON sc.subject_id = subj.subject_id\n    LEFT JOIN admission adm ON adm.schedule_id = sc.schedule_id\n    LEFT JOIN students st ON adm.student_id = st.student_id\n    LEFT JOIN attendance a \n        ON a.admission_id = adm.admission_id\n       AND a.attendance_date = ?\n       AND a.status IN ('Present','Late')\n    WHERE sc.employee_id = ?\n    GROUP BY subj.subject_id, subj.subject_name, LOWER(TRIM(st.gender))\n    ORDER BY subj.subject_name ASC\n";
+$present_sql = "
+    SELECT 
+        subj.subject_name,
+        LOWER(TRIM(st.gender)) AS gkey,
+        SUM(CASE WHEN a.attendance_id IS NOT NULL THEN 1 ELSE 0 END) AS present_count
+    FROM schedule sc
+    JOIN subjects subj ON sc.subject_id = subj.subject_id
+    LEFT JOIN admissions adm ON adm.schedule_id = sc.schedule_id
+    LEFT JOIN students st ON adm.student_id = st.student_id
+    LEFT JOIN attendance a 
+        ON a.admission_id = adm.admission_id
+       AND a.attendance_date = ?
+       AND a.status IN ('Present','Late')
+    WHERE sc.employee_id = ?
+    GROUP BY subj.subject_id, subj.subject_name, LOWER(TRIM(st.gender))
+    ORDER BY subj.subject_name ASC
+";
 
 $present_stmt = $conn->prepare($present_sql);
 $present_stmt->bind_param('si', $today, $teacher_id_int);
@@ -125,7 +171,23 @@ $current_date = date('F j, Y');
 
 // Latest scan (most recent attendance record) - include student info and subject using src_db schema
 $latest_scan = null;
-$latest_stmt = $conn->prepare("\n    SELECT \n        a.attendance_date, a.time_in, a.time_out, a.status,\n        st.student_id, st.first_name, st.middle_name, st.last_name, st.profile_picture,\n        subj.subject_name, sec.section_name, yl.year_name, pa.pc_number\n    FROM attendance a\n    JOIN admission adm ON a.admission_id = adm.admission_id\n    JOIN students st ON adm.student_id = st.student_id\n    JOIN schedule sc ON adm.schedule_id = sc.schedule_id\n    JOIN subject subj ON sc.subject_id = subj.subject_id\n    LEFT JOIN section sec ON adm.section_id = sec.section_id\n    LEFT JOIN year_level yl ON adm.year_level_id = yl.year_id\n    LEFT JOIN pc_assignment pa ON pa.student_id = st.student_id AND pa.lab_id = sc.lab_id\n    WHERE sc.employee_id = ?\n    ORDER BY a.attendance_date DESC, COALESCE(a.time_out, a.time_in) DESC\n    LIMIT 1\n");
+$latest_stmt = $conn->prepare("
+    SELECT 
+        a.attendance_date, a.time_in, a.time_out, a.status,
+        st.student_id, st.first_name, st.middle_name, st.last_name, st.profile_picture,
+        subj.subject_name, sec.section_name, yl.year_name, pa.pc_number
+    FROM attendance a
+    JOIN admissions adm ON a.admission_id = adm.admission_id
+    JOIN students st ON adm.student_id = st.student_id
+    JOIN schedule sc ON adm.schedule_id = sc.schedule_id
+    JOIN subjects subj ON sc.subject_id = subj.subject_id
+    LEFT JOIN sections sec ON adm.section_id = sec.section_id
+    LEFT JOIN year_levels yl ON adm.year_level_id = yl.year_id
+    LEFT JOIN pc_assignment pa ON pa.student_id = st.student_id AND pa.lab_id = sc.lab_id
+    WHERE sc.employee_id = ?
+    ORDER BY a.attendance_date DESC, COALESCE(a.time_out, a.time_in) DESC
+    LIMIT 1
+");
 if ($latest_stmt) {
     $latest_stmt->bind_param('i', $teacher_id_int);
     $latest_stmt->execute();
