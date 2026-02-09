@@ -1,5 +1,4 @@
 <?php
-session_start();
 include '../includes/db.php';
 
 // Only allow teachers - MUST be before any output (including include '../includes/header.php')
@@ -12,7 +11,6 @@ date_default_timezone_set('Asia/Manila');
 // Tell header.php that this page will provide its own (teacher) sidebar markup
 $use_custom_sidebar = true;
 include '../includes/header.php';
-include '../includes/db.php';
 
 $teacher_id = $_SESSION['teacher_id'];
 $teacher_name = $_SESSION['teacher_name'];

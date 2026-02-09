@@ -1,6 +1,5 @@
 <?php
 include '../includes/db.php';
-if (session_status() === PHP_SESSION_NONE) { session_start(); }
 if (!isset($_SESSION['user'])) { header('Location: ../login.php'); exit(); }
 
 $year = isset($_GET['year']) ? trim($_GET['year']) : null;

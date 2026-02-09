@@ -1,5 +1,4 @@
 <?php
-session_start();
 include '../includes/db.php';
 
 // Authentication check before any output

@@ -1,5 +1,4 @@
 <?php
-session_start();
 include '../includes/db.php';
 
 // Redirect if not logged in as teacher

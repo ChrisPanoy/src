@@ -1,11 +1,11 @@
 <?php
-session_start();
+include '../includes/db.php';
+
 if (!isset($_SESSION['user'])) {
     header("Location: ../login.php");
     exit();
 }
 include '../includes/header.php';
-include '../includes/db.php';
 
 $ay_id = isset($_GET['ay_id']) ? (int)$_GET['ay_id'] : ($_SESSION['active_ay_id'] ?? 0);
 $sem_id = isset($_GET['semester_id']) ? (int)$_GET['semester_id'] : ($_SESSION['active_sem_id'] ?? 0);

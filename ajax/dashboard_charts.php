@@ -11,7 +11,6 @@ $response = [
     'by_subject' => []
 ];
 
-if (session_status() === PHP_SESSION_NONE) session_start();
 $ay_id  = (int)($_SESSION['active_ay_id'] ?? 0);
 $sem_id = (int)($_SESSION['active_sem_id'] ?? 0);
 

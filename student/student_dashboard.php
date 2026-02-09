@@ -1,11 +1,6 @@
 <?php
 include '../includes/db.php';
 
-// Ensure session is started before checking auth so header redirects work
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 // Redirect if not logged in
 if (!isset($_SESSION['user'])) {
     header("Location: ../login.php");

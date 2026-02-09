@@ -1,5 +1,4 @@
 <?php
-session_start();
 include __DIR__ . '/db.php';
 if (!isset($_SESSION['teacher_id'])) {
     exit('Not authorized');

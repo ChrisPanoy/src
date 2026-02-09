@@ -1,5 +1,5 @@
 <?php
-session_start();
+include '../includes/db.php';
 
 // If using multiple teacher sessions, remove only the active one
 if (isset($_SESSION['active_teacher_id']) && isset($_SESSION['teachers']) && is_array($_SESSION['teachers'])) {

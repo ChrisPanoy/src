@@ -1,5 +1,4 @@
 <?php
-session_start();
 include '../includes/db.php';
 
 // Ensure teacher is active (legacy backfill compatible)

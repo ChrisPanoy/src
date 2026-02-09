@@ -3,11 +3,6 @@ if (!isset($teacher_name)) {
     $teacher_name = isset($_SESSION['teacher_name']) ? $_SESSION['teacher_name'] : '';
 }
 
-// Ensure session is started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 $currentDir = basename(dirname($_SERVER['PHP_SELF']));
 $isSubfolder = in_array($currentDir, ['admin', 'student', 'teacher', 'ajax', 'includes']);
 $basePath = $isSubfolder ? '../' : '';

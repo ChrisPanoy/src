@@ -1,11 +1,6 @@
 <?php
-date_default_timezone_set('Asia/Manila');
 require_once __DIR__ . '/../includes/db.php';
-
-// Session variables
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+date_default_timezone_set('Asia/Manila');
 
 // Academic Year and Semester filters (default to active session)
 $ay_filter = isset($_GET['ay_id']) ? (int)$_GET['ay_id'] : ($_SESSION['active_ay_id'] ?? 0);

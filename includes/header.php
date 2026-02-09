@@ -1,7 +1,4 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 $currentPage = basename($_SERVER['PHP_SELF']);
 $currentDir = basename(dirname($_SERVER['PHP_SELF']));
 $isSubfolder = in_array($currentDir, ['admin', 'student', 'teacher', 'ajax', 'includes']);

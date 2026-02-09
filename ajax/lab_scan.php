@@ -1,12 +1,11 @@
 <?php
+require_once __DIR__ . '/../includes/db.php';
 // Handles lab-specific scan submissions: POST { barcode, lab }
 // Maps to the active subject in the specified lab based on schedule and records attendance.
 
 date_default_timezone_set('Asia/Manila');
-if (session_status() === PHP_SESSION_NONE) session_start();
 header('Content-Type: application/json; charset=utf-8');
 
-require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/kiosk_config.php';
 
 // Check database connection

@@ -1,10 +1,10 @@
 <?php
+include __DIR__ . '/db.php';
+
 // Ensure timezone is set
 if (!ini_get('date.timezone')) {
     date_default_timezone_set('Asia/Manila');
 }
-session_start();
-include __DIR__ . '/db.php';
 
 $type = isset($_GET['type']) ? $_GET['type'] : 'all';
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;

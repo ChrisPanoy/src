@@ -1,6 +1,5 @@
 <?php
 // Standalone per-lab student dashboard with live feed and scan box
-if (session_status() === PHP_SESSION_NONE) session_start();
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/kiosk_config.php';
 

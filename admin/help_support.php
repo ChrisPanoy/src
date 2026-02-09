@@ -1,6 +1,6 @@
 <?php
+include '../includes/db.php';
 // help_support.php - Professional Help/Support Chat Page UI
-session_start();
 if (!isset($_SESSION['user'])) {
     header("Location: ../login.php");
     exit();

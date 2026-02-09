@@ -1,5 +1,5 @@
 <?php
-session_start();
+include '../includes/db.php';
 
 // Only allow switching if teachers array exists
 if (!isset($_GET['key']) || !isset($_SESSION['teachers']) || !is_array($_SESSION['teachers'])) {

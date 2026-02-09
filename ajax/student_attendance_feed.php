@@ -1,20 +1,11 @@
 <?php
+require_once __DIR__ . '/../includes/db.php';
 // Feed for recent student attendance scans (returns JSON)
 // Returns: id, student_id, name, status, scan_time, subject_name, photo, course, year_level
 
 date_default_timezone_set('Asia/Manila');
 header('Content-Type: application/json; charset=utf-8');
 
-if (session_status() === PHP_SESSION_NONE) session_start();
-
-// Include DB
-$dbPath = __DIR__ . '/../includes/db.php';
-if (!file_exists($dbPath)) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Server error', 'message' => 'DB file missing']);
-    exit();
-}
-require_once $dbPath;
 // Include kiosk token (for public kiosk access)
 require_once __DIR__ . '/../includes/kiosk_config.php';
 
