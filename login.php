@@ -1,6 +1,5 @@
 ﻿<?php
 include 'includes/db.php';
-session_start();
 
 // Admin login now uses the employees table from src_db
 // Only role 'MIS Admin' (and optionally other non-faculty roles) can log in here.
@@ -29,7 +28,9 @@ if (isset($_POST['login'])) {
             if ($role_lower !== 'mis admin' && $role_lower !== 'dean') {
                 $error = "You are not allowed to access the admin area.";
             } else {
-                session_regenerate_id(true);
+                if (session_status() === PHP_SESSION_ACTIVE) {
+                    session_regenerate_id(true);
+                }
                 $_SESSION['user'] = $row;
                 // Academic year and semester are auto-loaded by includes/db.php which is already included.
                 header("Location: admin/dashboard.php");

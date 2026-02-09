@@ -1,5 +1,4 @@
 <?php
-session_start();
 include '../includes/db.php';
 
 // NOTE: allow logging in another teacher even if one is already active.
@@ -58,7 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $_SESSION['teacher_email'] = $teacher_record['teacher_email'];
                     $_SESSION['teacher_department'] = $teacher_record['teacher_department'];
 
-                    session_regenerate_id(true);
+                    if (session_status() === PHP_SESSION_ACTIVE) {
+                        session_regenerate_id(true);
+                    }
                     header("Location: teacher_dashboard.php");
                     exit();
                 }

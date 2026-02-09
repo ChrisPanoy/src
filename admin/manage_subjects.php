@@ -176,9 +176,7 @@ $teachers = $conn->query("SELECT e.employee_id, e.firstname, e.lastname, r.role_
             <h2 class="text-3xl font-bold text-blue-900 flex items-center gap-3">
                 Manage Subjects
             </h2>
-            <a href="add_subject.php" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-lg font-bold flex items-center gap-2">
-                <i class="fas fa-plus"></i> Add New Subject
-            </a>
+
         </div>
 
         <!-- Filter and Sort Controls -->

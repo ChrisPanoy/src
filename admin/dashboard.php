@@ -1,11 +1,11 @@
 <?php
-session_start();
+include '../includes/db.php';
+
 if (!isset($_SESSION['user'])) {
     header("Location: ../login.php");
     exit();
 }
 include '../includes/header.php';
-include '../includes/db.php';
 
 // Default to today
 date_default_timezone_set('Asia/Manila');

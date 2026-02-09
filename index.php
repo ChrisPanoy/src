@@ -233,8 +233,8 @@
           AI-Driven System Active
         </div>
         <h1 class="text-5xl md:text-7xl font-black leading-tight">
-          RFID <br> 
-  <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500">COMPUTER LABORATORY ATTENDANCE MONITORING SYSTEM</span>
+         COMPUTER LABORATORIES AUTOMATED ACCESS CONTROL <br> 
+  <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500"> FOR SANTA RITA COLLEGE OF PAMPANGA BSIS STUDENT</span>
         </h1>
         <p class="text-lg text-gray-300 max-w-lg leading-relaxed font-light">
           Tap your RFID card in the Student Dashboard. Experience the future of campus laboratory management.

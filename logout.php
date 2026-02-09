@@ -1,8 +1,5 @@
 <?php
-// Start session if not started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+include 'includes/db.php';
 
 // Unset all session variables
 $_SESSION = [];

@@ -1,8 +1,23 @@
 <?php
+ob_start();
+
+// Robust session starting logic (helpful for shared hosting with misconfigured session paths)
+if (session_status() === PHP_SESSION_NONE) {
+    $savePath = ini_get('session.save_path');
+    if (empty($savePath) || !is_dir($savePath) || !is_writable($savePath)) {
+        $tempDir = sys_get_temp_dir();
+        if (is_dir($tempDir) && is_writable($tempDir)) {
+            session_save_path($tempDir);
+        }
+    }
+    // Attempt to start session, suppressing errors to handle them gracefully
+    @session_start();
+}
+
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db = "src_lab";
+$db = "src_db";
 
 // Enable mysqli exception mode for better error handling
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
