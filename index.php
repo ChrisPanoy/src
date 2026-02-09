@@ -209,7 +209,7 @@
         <div class="flex flex-col">
           <span class="text-lg font-bold tech-text text-blue-400 leading-none">RCLAMS-CCS</span>
           <span class="text-[10px] uppercase tracking-widest text-gray-400">Santa Rita College of Pampanga</span>
-          <span class="text-[9px] uppercase tracking-tight text-blue-500/60 font-semibold">College of Computer Studies</span>
+          <span class="text-[9px] uppercase tracking-tight text-blue-500/60 font-semibold">Colleges of Computer Studies</span>
         </div>
       </div>
       <div class="hidden md:flex items-center gap-8">
